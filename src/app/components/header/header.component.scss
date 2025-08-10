@@ -1,9 +1,47 @@
+// Header avec thème bleu foncé
+.header-toolbar {
+  background-color: #1a237e !important; // Bleu foncé
+  color: white !important;
+  
+  .mat-toolbar {
+    background-color: #1a237e !important;
+    color: white !important;
+  }
+  
+  // Boutons et icônes en blanc
+  .mat-icon-button {
+    color: white !important;
+    
+    .mat-icon {
+      color: white !important;
+    }
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+  }
+  
+  // Menu button
+  .menu-button {
+    color: white !important;
+  }
+}
+
 .title {
   font-size: 1.2rem;
   font-weight: 500;
   margin-left: 16px;
+  color: white !important;
 }
 
 .spacer {
   flex: 1 1 auto;
+}
+
+// Override Material toolbar styles globalement
+::ng-deep {
+  .mat-toolbar.mat-primary {
+    background-color: #1a237e !important;
+    color: white !important;
+  }
 }

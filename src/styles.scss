@@ -2,3 +2,91 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Thème bleu pour l'application */
+
+// Card headers en bleu
+.mat-card-header {
+  background-color: #2196f3 !important; // Bleu
+  color: white !important;
+  padding: 16px !important;
+  margin: -16px -16px 16px -16px !important;
+  border-radius: 4px 4px 0 0 !important;
+  
+  .mat-card-title {
+    color: white !important;
+    font-weight: 500 !important;
+  }
+  
+  .mat-card-subtitle {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+  
+  .mat-icon {
+    color: white !important;
+  }
+}
+
+// Cards avec headers bleus
+.mat-card {
+  .mat-card-header {
+    background-color: #2196f3 !important;
+    color: white !important;
+    padding: 16px !important;
+    margin: -16px -16px 16px -16px !important;
+    border-radius: 4px 4px 0 0 !important;
+    
+    .mat-card-title {
+      color: white !important;
+      font-weight: 500 !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+    }
+    
+    .mat-card-subtitle {
+      color: rgba(255, 255, 255, 0.8) !important;
+    }
+    
+    .mat-icon {
+      color: white !important;
+    }
+    
+    // Boutons dans les headers
+    .mat-button, .mat-icon-button, .mat-raised-button {
+      color: white !important;
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+      }
+    }
+  }
+}
+
+// Headers spéciaux pour différents types de cards
+.card-header-primary {
+  background-color: #2196f3 !important; // Bleu principal
+}
+
+.card-header-success {
+  background-color: #4caf50 !important; // Vert
+}
+
+.card-header-warning {
+  background-color: #ff9800 !important; // Orange
+}
+
+.card-header-danger {
+  background-color: #f44336 !important; // Rouge
+}
+
+// Sidebar avec fond bleu clair
+.mat-drawer {
+  background-color: #64b5f6 !important;
+}
+
+// Header avec fond bleu foncé
+.mat-toolbar.mat-primary {
+  background-color: #1a237e !important;
+  color: white !important;
+}
