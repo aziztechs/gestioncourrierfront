@@ -1,6 +1,52 @@
+// Sidebar avec thème bleu clair
+.sidebar-container {
+  background-color: #64b5f6 !important; // Bleu clair
+  color: white !important;
+  height: 100%;
+  
+  mat-nav-list {
+    background-color: #64b5f6 !important;
+    padding-top: 0;
+    
+    .mat-list-item {
+      color: white !important;
+      
+      .mat-list-item-content {
+        color: white !important;
+        
+        .mat-icon {
+          color: white !important;
+        }
+      }
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+      }
+      
+      &.active {
+        background-color: rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+        font-weight: 600;
+        
+        .mat-icon {
+          color: white !important;
+        }
+      }
+    }
+  }
+  
+  h3[matSubheader] {
+    color: white !important;
+    font-weight: 600;
+    margin-top: 16px;
+    background-color: transparent !important;
+  }
+}
+
 .active {
-  background-color: rgba(0, 0, 0, 0.04);
-  color: #3f51b5;
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+  font-weight: 600;
 }
 
 mat-nav-list {
@@ -8,7 +54,30 @@ mat-nav-list {
 }
 
 h3[matSubheader] {
-  color: #666;
-  font-weight: 500;
+  color: white !important;
+  font-weight: 600;
   margin-top: 16px;
+}
+
+// Override global Material styles pour le sidebar
+::ng-deep {
+  .mat-drawer {
+    background-color: #64b5f6 !important;
+    
+    .mat-nav-list .mat-list-item {
+      color: white !important;
+      
+      .mat-icon {
+        color: white !important;
+      }
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+      }
+    }
+    
+    .mat-subheader {
+      color: white !important;
+    }
+  }
 }
