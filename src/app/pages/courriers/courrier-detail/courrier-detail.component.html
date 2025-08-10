@@ -1,0 +1,165 @@
+<div class="courrier-detail-container">
+  <!-- Header -->
+  <div class="header-section">
+    <div class="header-info">
+      <button mat-icon-button (click)="goBack()" matTooltip="Retour à la liste">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>Détails du courrier</h1>
+    </div>
+    <div class="header-actions" *ngIf="courrier">
+      <button mat-raised-button color="accent" (click)="editCourrier()">
+        <mat-icon>edit</mat-icon>
+        Modifier
+      </button>
+      <button mat-raised-button color="warn" (click)="deleteCourrier()">
+        <mat-icon>delete</mat-icon>
+        Supprimer
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Chargement du courrier...</p>
+  </div>
+
+  <!-- Courrier Details -->
+  <div *ngIf="!loading && courrier" class="content-section">
+    <!-- Basic Information Card -->
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>info</mat-icon>
+          Informations générales
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Numéro de courrier</label>
+            <div class="value">
+              <mat-icon>confirmation_number</mat-icon>
+              <strong>{{ courrier.numCourrier }}</strong>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <label>Date</label>
+            <div class="value">
+              <mat-icon>calendar_today</mat-icon>
+              {{ formatDate(courrier.date) }}
+            </div>
+          </div>
+
+          <div class="info-item full-width">
+            <label>Objet</label>
+            <div class="value">
+              <mat-icon>subject</mat-icon>
+              {{ courrier.objet }}
+            </div>
+          </div>
+
+          <div class="info-item">
+            <label>Type</label>
+            <div class="value">
+              <mat-chip [color]="courrier.type === TypeCourrier.INTERNE ? 'primary' : 'accent'" selected>
+                <mat-icon>{{ courrier.type === TypeCourrier.INTERNE ? 'business' : 'public' }}</mat-icon>
+                {{ getTypeLabel(courrier.type) }}
+              </mat-chip>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <label>Nature</label>
+            <div class="value">
+              <mat-chip [color]="courrier.nature === NatureCourrier.ARRIVE ? 'primary' : 'warn'" selected>
+                <mat-icon>{{ courrier.nature === NatureCourrier.ARRIVE ? 'arrow_downward' : 'arrow_upward' }}</mat-icon>
+                {{ getNatureLabel(courrier.nature) }}
+              </mat-chip>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <label>Expéditeur</label>
+            <div class="value">
+              <mat-icon>person</mat-icon>
+              {{ courrier.expediteur }}
+            </div>
+          </div>
+
+          <div class="info-item">
+            <label>Destinataire</label>
+            <div class="value">
+              <mat-icon>person_outline</mat-icon>
+              {{ courrier.destinataire }}
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- PDF Document Card -->
+    <mat-card *ngIf="courrier.pdfFile" class="pdf-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>picture_as_pdf</mat-icon>
+          Document PDF
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="pdf-info">
+          <div class="pdf-details">
+            <mat-icon color="primary">attach_file</mat-icon>
+            <div class="pdf-text">
+              <p><strong>Document disponible</strong></p>
+              <p class="pdf-filename">{{ courrier.pdfFile }}</p>
+            </div>
+          </div>
+          <button mat-raised-button color="primary" (click)="downloadPdf()">
+            <mat-icon>download</mat-icon>
+            Télécharger
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- No PDF Card -->
+    <mat-card *ngIf="!courrier.pdfFile" class="no-pdf-card">
+      <mat-card-content>
+        <div class="no-pdf-content">
+          <mat-icon class="no-pdf-icon">description</mat-icon>
+          <p>Aucun document PDF associé à ce courrier</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Suivi Section -->
+    <mat-card class="suivi-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>timeline</mat-icon>
+          Suivi du courrier
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <app-suivi [courrier]="courrier" [readonly]="false"></app-suivi>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Error State -->
+  <mat-card *ngIf="!loading && !courrier" class="error-card">
+    <mat-card-content>
+      <div class="error-content">
+        <mat-icon class="error-icon">error</mat-icon>
+        <h3>Courrier introuvable</h3>
+        <p>Le courrier demandé n'existe pas ou a été supprimé.</p>
+        <button mat-raised-button color="primary" (click)="goBack()">
+          Retour à la liste
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

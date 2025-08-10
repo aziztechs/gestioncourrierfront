@@ -1,0 +1,216 @@
+.courrier-list-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  .header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h1 {
+      margin: 0;
+      color: #333;
+      font-weight: 500;
+    }
+
+    button {
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .filters-card {
+    margin-bottom: 20px;
+
+    .filters-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+
+      .filter-field {
+        width: 100%;
+      }
+    }
+
+    .filter-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+
+      button {
+        mat-icon {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+
+    mat-spinner {
+      margin-bottom: 16px;
+    }
+
+    p {
+      color: #666;
+      font-size: 14px;
+    }
+  }
+
+  .table-card {
+    .courrier-table {
+      width: 100%;
+
+      .mat-column-numCourrier {
+        width: 120px;
+      }
+
+      .mat-column-objet {
+        min-width: 200px;
+      }
+
+      .mat-column-type,
+      .mat-column-nature {
+        width: 100px;
+        text-align: center;
+      }
+
+      .mat-column-expediteur,
+      .mat-column-destinataire {
+        width: 150px;
+      }
+
+      .mat-column-date {
+        width: 100px;
+      }
+
+      .mat-column-actions {
+        width: 120px;
+        text-align: center;
+      }
+
+      .objet-cell {
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      mat-chip {
+        font-size: 12px;
+        min-height: 24px;
+
+        mat-icon {
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
+          margin-right: 4px;
+        }
+      }
+
+      mat-header-cell {
+        font-weight: 600;
+        color: #333;
+      }
+
+      mat-cell {
+        padding: 8px;
+      }
+
+      mat-row:hover {
+        background-color: #f5f5f5;
+      }
+    }
+  }
+
+  .no-data-card {
+    .no-data-content {
+      text-align: center;
+      padding: 40px;
+
+      .no-data-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        color: #ccc;
+        margin-bottom: 16px;
+      }
+
+      h3 {
+        color: #666;
+        margin-bottom: 8px;
+      }
+
+      p {
+        color: #999;
+        margin-bottom: 24px;
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .courrier-list-container {
+    padding: 10px;
+
+    .header-section {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+
+      h1 {
+        text-align: center;
+      }
+    }
+
+    .filters-card .filters-row {
+      grid-template-columns: 1fr;
+    }
+
+    .table-card {
+      overflow-x: auto;
+
+      .courrier-table {
+        min-width: 800px;
+      }
+    }
+  }
+}
+
+// Custom snackbar styles
+::ng-deep {
+  .success-snackbar {
+    background-color: #4caf50 !important;
+    color: white !important;
+  }
+
+  .error-snackbar {
+    background-color: #f44336 !important;
+    color: white !important;
+  }
+
+  .info-snackbar {
+    background-color: #2196f3 !important;
+    color: white !important;
+  }
+
+  .warning-snackbar {
+    background-color: #ff9800 !important;
+    color: white !important;
+  }
+
+  .confirmation-snackbar {
+    background-color: #9c27b0 !important;
+    color: white !important;
+  }
+}

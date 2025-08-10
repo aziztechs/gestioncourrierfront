@@ -1,0 +1,180 @@
+<div class="suivi-container">
+  <!-- Header -->
+  <div class="suivi-header">
+    <h3>
+      <mat-icon>timeline</mat-icon>
+      Suivi du courrier {{ courrier?.numCourrier }}
+    </h3>
+    <button *ngIf="!readonly" 
+            mat-raised-button 
+            color="primary" 
+            (click)="toggleAddForm()"
+            [disabled]="loading">
+      <mat-icon>{{ showAddForm ? 'close' : 'add' }}</mat-icon>
+      {{ showAddForm ? 'Annuler' : 'Ajouter un suivi' }}
+    </button>
+  </div>
+
+  <!-- Add Suivi Form -->
+  <mat-card *ngIf="showAddForm && !readonly" class="add-form-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>add_circle</mat-icon>
+        Nouveau suivi
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="suiviForm" (ngSubmit)="onSubmit()" class="suivi-form">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field-wide">
+            <mat-label>Instruction *</mat-label>
+            <input matInput formControlName="instruction" placeholder="Instruction ou action à effectuer">
+            <mat-icon matSuffix>assignment</mat-icon>
+            <mat-error *ngIf="suiviForm.get('instruction')?.touched && suiviForm.get('instruction')?.errors">
+              {{ getErrorMessage('instruction') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Date *</mat-label>
+            <input matInput type="date" formControlName="date">
+            <mat-icon matSuffix>calendar_today</mat-icon>
+            <mat-error *ngIf="suiviForm.get('date')?.touched && suiviForm.get('date')?.errors">
+              {{ getErrorMessage('date') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="form-field-full">
+          <mat-label>Description (optionnelle)</mat-label>
+          <textarea matInput 
+                    formControlName="description" 
+                    rows="3"
+                    placeholder="Description détaillée ou commentaires..."></textarea>
+          <mat-icon matSuffix>description</mat-icon>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button type="button" 
+                  mat-button 
+                  (click)="toggleAddForm()"
+                  [disabled]="submitting">
+            <mat-icon>cancel</mat-icon>
+            Annuler
+          </button>
+          
+          <button type="submit" 
+                  mat-raised-button 
+                  color="primary"
+                  [disabled]="suiviForm.invalid || submitting">
+            <mat-spinner *ngIf="submitting" diameter="20"></mat-spinner>
+            <mat-icon *ngIf="!submitting">save</mat-icon>
+            {{ submitting ? 'Enregistrement...' : 'Ajouter' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Chargement des suivis...</p>
+  </div>
+
+  <!-- Suivis Timeline -->
+  <div *ngIf="!loading" class="timeline-container">
+    <div *ngIf="suivis.length === 0" class="no-suivis">
+      <mat-card class="no-data-card">
+        <mat-card-content>
+          <div class="no-data-content">
+            <mat-icon class="no-data-icon">timeline</mat-icon>
+            <h4>Aucun suivi</h4>
+            <p>Ce courrier n'a pas encore de suivi.</p>
+            <button *ngIf="!readonly" 
+                    mat-raised-button 
+                    color="primary" 
+                    (click)="toggleAddForm()">
+              Ajouter le premier suivi
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div *ngIf="suivis.length > 0" class="timeline">
+      <div *ngFor="let suivi of suivis; let i = index" class="timeline-item">
+        <div class="timeline-marker">
+          <mat-icon [color]="getTimelineColor(i)">{{ getTimelineIcon(i) }}</mat-icon>
+        </div>
+        
+        <mat-card class="timeline-card" [class.latest]="i === 0">
+          <mat-card-header>
+            <div class="timeline-header">
+              <div class="timeline-info">
+                <h4>{{ suivi.instruction }}</h4>
+                <div class="timeline-meta">
+                  <span class="date">
+                    <mat-icon>schedule</mat-icon>
+                    {{ formatDateTime(suivi.date) }}
+                  </span>
+                  <span *ngIf="i === 0" class="latest-badge">
+                    <mat-icon>new_releases</mat-icon>
+                    Dernier suivi
+                  </span>
+                </div>
+              </div>
+              
+              <div *ngIf="!readonly" class="timeline-actions">
+                <button mat-icon-button 
+                        color="warn" 
+                        (click)="deleteSuivi(suivi)"
+                        matTooltip="Supprimer ce suivi">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </mat-card-header>
+          
+          <mat-card-content *ngIf="suivi.description">
+            <div class="description">
+              <mat-icon>description</mat-icon>
+              <p>{{ suivi.description }}</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistics -->
+  <mat-card *ngIf="suivis.length > 0" class="stats-card">
+    <mat-card-content>
+      <div class="stats-content">
+        <div class="stat-item">
+          <mat-icon color="primary">timeline</mat-icon>
+          <div class="stat-info">
+            <span class="stat-value">{{ suivis.length }}</span>
+            <span class="stat-label">Suivi{{ suivis.length > 1 ? 's' : '' }}</span>
+          </div>
+        </div>
+        
+        <div class="stat-item" *ngIf="suivis.length > 0">
+          <mat-icon color="accent">schedule</mat-icon>
+          <div class="stat-info">
+            <span class="stat-value">{{ formatDate(suivis[0].date) }}</span>
+            <span class="stat-label">Dernier suivi</span>
+          </div>
+        </div>
+        
+        <div class="stat-item" *ngIf="suivis.length > 1">
+          <mat-icon color="warn">history</mat-icon>
+          <div class="stat-info">
+            <span class="stat-value">{{ formatDate(suivis[suivis.length - 1].date) }}</span>
+            <span class="stat-label">Premier suivi</span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
