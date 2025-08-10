@@ -1,1 +1,193 @@
-<h1> je suis un formulaire</h1>
+<div class="courrier-form-container">
+  <!-- Header -->
+  <div class="header-section">
+    <h1>{{ isEditMode ? 'Modifier le courrier' : 'Nouveau courrier' }}</h1>
+    <button mat-icon-button (click)="onCancel()" matTooltip="Retour à la liste">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Chargement du courrier...</p>
+  </div>
+
+  <!-- Form -->
+  <mat-card *ngIf="!loading" class="form-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>{{ isEditMode ? 'edit' : 'add' }}</mat-icon>
+        Informations du courrier
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="courrierForm" (ngSubmit)="onSubmit()" class="courrier-form">
+        
+        <!-- Row 1: Numéro et Objet -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Numéro de courrier *</mat-label>
+            <input matInput formControlName="numCourrier" placeholder="Ex: C2024-001">
+            <mat-icon matSuffix>confirmation_number</mat-icon>
+            <mat-error *ngIf="courrierForm.get('numCourrier')?.touched && courrierForm.get('numCourrier')?.errors">
+              {{ getErrorMessage('numCourrier') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field form-field-wide">
+            <mat-label>Objet *</mat-label>
+            <input matInput formControlName="objet" placeholder="Objet du courrier">
+            <mat-icon matSuffix>subject</mat-icon>
+            <mat-error *ngIf="courrierForm.get('objet')?.touched && courrierForm.get('objet')?.errors">
+              {{ getErrorMessage('objet') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Row 2: Type et Nature -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Type *</mat-label>
+            <mat-select formControlName="type">
+              <mat-option [value]="TypeCourrier.INTERNE">
+                <mat-icon>business</mat-icon>
+                {{ getTypeLabel(TypeCourrier.INTERNE) }}
+              </mat-option>
+              <mat-option [value]="TypeCourrier.EXTERNE">
+                <mat-icon>public</mat-icon>
+                {{ getTypeLabel(TypeCourrier.EXTERNE) }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="courrierForm.get('type')?.touched && courrierForm.get('type')?.errors">
+              {{ getErrorMessage('type') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Nature *</mat-label>
+            <mat-select formControlName="nature">
+              <mat-option [value]="NatureCourrier.ARRIVE">
+                <mat-icon>arrow_downward</mat-icon>
+                {{ getNatureLabel(NatureCourrier.ARRIVE) }}
+              </mat-option>
+              <mat-option [value]="NatureCourrier.DEPART">
+                <mat-icon>arrow_upward</mat-icon>
+                {{ getNatureLabel(NatureCourrier.DEPART) }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="courrierForm.get('nature')?.touched && courrierForm.get('nature')?.errors">
+              {{ getErrorMessage('nature') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Date *</mat-label>
+            <input matInput type="date" formControlName="date">
+            <mat-icon matSuffix>calendar_today</mat-icon>
+            <mat-error *ngIf="courrierForm.get('date')?.touched && courrierForm.get('date')?.errors">
+              {{ getErrorMessage('date') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Row 3: Expéditeur et Destinataire -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Expéditeur *</mat-label>
+            <input matInput formControlName="expediteur" placeholder="Nom de l'expéditeur">
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="courrierForm.get('expediteur')?.touched && courrierForm.get('expediteur')?.errors">
+              {{ getErrorMessage('expediteur') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Destinataire *</mat-label>
+            <input matInput formControlName="destinataire" placeholder="Nom du destinataire">
+            <mat-icon matSuffix>person_outline</mat-icon>
+            <mat-error *ngIf="courrierForm.get('destinataire')?.touched && courrierForm.get('destinataire')?.errors">
+              {{ getErrorMessage('destinataire') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- File Upload Section -->
+        <div class="file-upload-section">
+          <mat-card class="upload-card">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>attach_file</mat-icon>
+                Document PDF (optionnel)
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="upload-area">
+                <input type="file" 
+                       #fileInput 
+                       (change)="onFileSelected($event)" 
+                       accept=".pdf"
+                       style="display: none;">
+                
+                <button type="button" 
+                        mat-stroked-button 
+                        color="primary" 
+                        (click)="fileInput.click()"
+                        class="upload-button">
+                  <mat-icon>cloud_upload</mat-icon>
+                  Choisir un fichier PDF
+                </button>
+                
+                <div *ngIf="selectedFile" class="file-info">
+                  <mat-icon color="primary">picture_as_pdf</mat-icon>
+                  <span>{{ selectedFile.name }}</span>
+                  <span class="file-size">({{ (selectedFile.size / 1024 / 1024).toFixed(2) }} MB)</span>
+                </div>
+                
+                <p class="upload-hint">
+                  <mat-icon>info</mat-icon>
+                  Formats acceptés: PDF uniquement. Taille maximale: 10MB
+                </p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button type="button" 
+                  mat-button 
+                  (click)="onCancel()"
+                  [disabled]="submitting">
+            <mat-icon>cancel</mat-icon>
+            Annuler
+          </button>
+          
+          <button type="submit" 
+                  mat-raised-button 
+                  color="primary"
+                  [disabled]="courrierForm.invalid || submitting">
+            <mat-spinner *ngIf="submitting" diameter="20"></mat-spinner>
+            <mat-icon *ngIf="!submitting">{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+            {{ submitting ? 'Enregistrement...' : (isEditMode ? 'Modifier' : 'Créer') }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Form Summary (for debugging in development) -->
+  <mat-card *ngIf="!loading" class="debug-card" style="margin-top: 20px; display: none;">
+    <mat-card-header>
+      <mat-card-title>Debug Info</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p><strong>Form Valid:</strong> {{ courrierForm.valid }}</p>
+      <p><strong>Form Value:</strong></p>
+      <pre>{{ courrierForm.value | json }}</pre>
+      <p><strong>Form Errors:</strong></p>
+      <pre>{{ courrierForm.errors | json }}</pre>
+    </mat-card-content>
+  </mat-card>
+</div>

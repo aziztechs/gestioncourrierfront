@@ -21,6 +21,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -29,7 +30,9 @@ import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { CourrierFormComponent } from './pages/courriers/courrier-form/courrier-form.component';
 import { CourrierListComponent } from './pages/courriers/courrier-list/courrier-list.component';
+import { CourrierDetailComponent } from './pages/courriers/courrier-detail/courrier-detail.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { SuiviComponent } from './components/suivi/suivi.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 
@@ -41,7 +44,9 @@ import {HttpClientModule} from '@angular/common/http';
     SidebarComponent,
     CourrierFormComponent,
     CourrierListComponent,
-    DashboardComponent
+    CourrierDetailComponent,
+    DashboardComponent,
+    SuiviComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +73,8 @@ import {HttpClientModule} from '@angular/common/http';
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatChipsModule,
-    MatMenuModule
+    MatMenuModule,
+    MatTooltipModule
   ],
   providers: [
     provideAnimationsAsync()
